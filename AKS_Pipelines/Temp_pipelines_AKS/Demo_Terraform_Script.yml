@@ -1,0 +1,67 @@
+trigger: none
+
+pool:
+  vmImage: windows-latest 
+
+
+stages:
+  - stage: Build_Stage
+    jobs: 
+      - job: Build_Job
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Terraform_Installer
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTask@5
+            displayName: Terraform_Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root/'
+              backendServiceArm: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+              backendAzureRmResourceGroupName: 'RG-StorageAcc'
+              backendAzureRmStorageAccountName: 'maintainerfiles01'
+              backendAzureRmContainerName: 'tf-statefiles'
+              backendAzureRmKey: 'resourcegroup.statetf'
+          - task: TerraformTask@5
+            displayName: TerraformPlan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root/'
+              environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+  - stage: Deployment_Stage
+    jobs:
+      - job: Deployment_Job
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Terraform Installer
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTask@5
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root'
+              backendServiceArm: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+              backendAzureRmResourceGroupName: 'RG-StorageAcc'
+              backendAzureRmStorageAccountName: 'maintainerfiles01'
+              backendAzureRmContainerName: 'tf-statefiles'
+              backendAzureRmKey: 'resourcegroup.statetf'
+          - task: TerraformTask@5
+            displayName: Terraform Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root'
+              environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+          - task: TerraformTask@5
+            displayName: Terraform Apply
+            condition: succeeded()
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root'
+              environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
