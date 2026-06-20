@@ -1,0 +1,37 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+  - stage: Terraform_Stage
+    # Merges all variables from your template file into this stage scope
+    variables:
+      - template: Variables.yml
+
+    jobs:
+      - job: Terraform_Job
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTask@5
+            displayName: 'Terraform Init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/${{variables.Terraformpath}}/'
+              backendServiceArm: '${{variables.ServiceConnection}}'
+              backendAzureRmResourceGroupName: '${{variables.StroageaccountRG}}'
+              backendAzureRmStorageAccountName: '${{variables.StroageAccountname}}'
+              backendAzureRmContainerName: '${{variables.ContainerName}}'
+              backendAzureRmKey: 'demo.statetf'
+          
+          - task: TerraformTask@5
+            displayName: 'Terraform Plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/${{variables.Terraformpath}}/'
+              environmentServiceNameAzureRM: '${{variables.ServiceConnection}}'
