@@ -1,4 +1,4 @@
-RG_Info = "DEV-RG"
+RG_Info = "RG-Storage"
 
 Recovery_Service = {
   "Recovery_Service_Dev" = {
@@ -26,11 +26,13 @@ storage_Info = {
 
 container = {
   "Container_Dev" = {
-    Recovery_Var = "Recovery_Service_Dev"
-    Storage_Var  = "Storage_Dev"
+    name = "stateinfodev"
+    storage_account_name = "Storage_Dev"
+    container_access_type = "private"
   }
   "Container_Prod" = {
-    Recovery_Var = "Recovery_Service_Prod"
-    Storage_Var  = "Storage_Prod"
+    name = "stateinfoprod"
+    storage_account_name = "Storage_Prod"
+    container_access_type = "private"
   }
 }
