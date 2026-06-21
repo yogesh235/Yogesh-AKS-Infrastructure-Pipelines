@@ -1,0 +1,23 @@
+name: AKS_Infra_Templates
+
+trigger: none
+
+parameters:
+  - name: deployment
+    displayName: Enviroment
+    type: string
+    values:
+        - build
+        - release
+    default: build
+
+stages:
+  - stage: Terraform_Build
+    condition: eq('${{parameters.deployment}}', 'build')
+    jobs:
+      - template: /AKS_Pipelines/AKS_CICD_Methodology/Build_AKS.yml
+
+  - stage: Terraform_Relese
+    condition: eq('${{parameters.deployment}}', 'release')
+    jobs:
+     - template: /AKS_Pipelines/AKS_CICD_Methodology/Release_AKS.yml

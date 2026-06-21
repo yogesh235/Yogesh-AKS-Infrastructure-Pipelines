@@ -1,0 +1,40 @@
+parameters:
+  - name: image
+    displayName: Pool
+    type: string
+    values:
+        - windows-latest
+        - ubuntu-latest
+    default: windows-latest
+
+jobs:
+  - job: Terraform_Job
+    pool:
+      vmImage: ${{parameters.image}}
+    variables:
+      - template: /AKS_Pipelines/AKS_CICD_Methodology/Variables.yml
+      - group: AKS_Pipelines_VariablesGroup
+    steps:
+      - task: TerraformInstaller@1
+        displayName: Terraform Installer
+        inputs:
+          terraformVersion: 'latest'
+      
+      - task: TerraformTask@5
+        displayName: Terraform Init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/${{variables.WorkingResource}}/'
+          backendServiceArm: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+          backendAzureRmResourceGroupName: '${{variables.BackendResourceGroupInfo}}'
+          backendAzureRmStorageAccountName: '${{variables.BackendStorageAccount}}'
+          backendAzureRmContainerName: '${{variables.BackendContainerName}}'
+          backendAzureRmKey: '${{variables.BackendAzureKey}}'
+      - task: TerraformTask@5
+        displayName: Terraform Plan
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/Root/'
+          environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'

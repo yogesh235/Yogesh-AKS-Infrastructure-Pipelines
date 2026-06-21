@@ -1,0 +1,48 @@
+parameters:
+  - name: PoolName
+    displayName: PoolImage
+    type: string
+    values:
+        - windows-latest
+        - ubuntu-latest
+    default: windows-latest
+
+jobs:
+  - job: Release
+    pool:
+     vmImage: ${{parameters.PoolName}}
+    variables:
+      - group: AKS_Pipelines_VariablesGroup
+    steps:
+      - task: TerraformInstaller@1
+        displayName: Terraform Installer
+        inputs:
+          terraformVersion: 'latest'
+
+      - task: TerraformTask@5
+        displayName: Terraform Init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/$(WorkingResource)/'
+          backendServiceArm: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+          backendAzureRmResourceGroupName: '$(BackendResourceGroupInfo)'
+          backendAzureRmStorageAccountName: '$(BackendStorageAccount)'
+          backendAzureRmContainerName: '$(BackendContainerName)'
+          backendAzureRmKey: '$(BackendAzureKey)'
+    
+      - task: TerraformTask@5
+        displayName: Terraform Plan
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/$(WorkingResource)/'
+          environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'
+    
+      - task: TerraformTask@5
+        displayName: Terraform Apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/AKS-Infrastructure/$(WorkingResource)/'
+          environmentServiceNameAzureRM: 'Pay-As-You-Go(36e459d6-916d-4929-bb97-1894ec00e647)'

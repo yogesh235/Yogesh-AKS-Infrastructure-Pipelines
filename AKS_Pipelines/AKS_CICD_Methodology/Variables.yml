@@ -1,0 +1,6 @@
+variables:
+  WorkingResource: Root
+  BackendResourceGroupInfo: RG-Storage
+  BackendStorageAccount: maintenance01
+  BackendContainerName: statefileinfo
+  BackendAzureKey: aksstatefile.tfstate
