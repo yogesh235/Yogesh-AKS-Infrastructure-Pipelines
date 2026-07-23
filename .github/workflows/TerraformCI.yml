@@ -32,7 +32,7 @@ jobs:
         uses: azure/cli@v3
         with:
          inlineScript: |
-           az login --subscription 36e459d6-916d-4929-bb97-1894ec00e647
+           az login --tenant da01548b-20fc-4057-8cda-5c68e4fcdd3e
            az account show
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
