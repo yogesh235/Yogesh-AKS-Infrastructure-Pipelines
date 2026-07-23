@@ -36,4 +36,4 @@ jobs:
 
       - name: Terrafrom Plan
         working-directory: ResourceGroup_Infra/Root
-        run: terraform plan --var-input="Prod.tfvars"
+        run: terraform plan --var-file="Prod.tfvars"
