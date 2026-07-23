@@ -24,13 +24,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - name: Azure Login
-        uses: Azure/login@v3
+      
+      - name: Azure CLI Login
+        uses: azure/cli@v3
         with:
-          # TenantId of the Azure Service principal created.
-          tenant-id: da01548b-20fc-4057-8cda-5c68e4fcdd3e
-          # Azure subscriptionId
-          subscription-id: 36e459d6-916d-4929-bb97-1894ec00e647
+        inlineScript: |
+          # az login --service-principal \
+          #   --username ${{ secrets.AZURE_CLIENT_ID }} \
+          #   --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+          #   --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set --subscription 36e459d6-916d-4929-bb97-1894ec00e647
+          az account show
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
