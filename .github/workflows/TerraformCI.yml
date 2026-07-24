@@ -24,11 +24,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-       name: Azure Login
-       uses: Azure/login@v3
-       with:
-       # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-       creds: ${{secret.CREDENTIAL}}
+      - name: Azure Login
+        uses: Azure/login@v3
+        with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+         creds: ${{secrets.CREDENTIAL}}
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
