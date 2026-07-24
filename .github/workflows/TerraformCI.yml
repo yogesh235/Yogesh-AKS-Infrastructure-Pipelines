@@ -29,6 +29,11 @@ jobs:
         with:
         # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
          creds: ${{secrets.CREDENTIAL}}
+         client-id: a1a4f875-e7dc-43dc-b1a9-9e7d32426ae6
+         # TenantId of the Azure Service principal created.
+         tenant-id: da01548b-20fc-4057-8cda-5c68e4fcdd3e
+         # Azure subscriptionId
+         subscription-id: 36e459d6-916d-4929-bb97-1894ec00e647
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
