@@ -46,6 +46,7 @@ jobs:
   Terraform-Apply:
     runs-on: ubuntu-latest
     environment: Prod
+    needs: Terraform-build
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -63,4 +64,13 @@ jobs:
         
       - name: Terraform Apply
         working-directory: ResourceGroup_Infra/Root
-        run: terraform apply --auto-approve -var-file="Prod.tfvars"
+        run: terraform apply --auto-approve -var-file="Prod.tfvar"
+
+      - name: Generate Terraform Docs
+        if: success()
+        uses: terraform-docs/gh-actions@v1.3.0
+        with:
+          working-dir: ResourceGroup_Infra/Root
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
