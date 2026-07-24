@@ -23,14 +23,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       - name: Azure Login
         uses: azure/login@v2
         with:
-         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-         client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
