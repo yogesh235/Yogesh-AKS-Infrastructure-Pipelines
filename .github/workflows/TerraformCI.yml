@@ -64,7 +64,7 @@ jobs:
         
       - name: Terraform Apply
         working-directory: ResourceGroup_Infra/Root
-        run: terraform apply --auto-approve -var-file="Prod.tfvar"
+        run: terraform apply --auto-approve -var-file="Prod.tfvars"
 
       - name: Generate Terraform Docs
         if: success()
