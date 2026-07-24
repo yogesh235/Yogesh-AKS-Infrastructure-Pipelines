@@ -63,4 +63,4 @@ jobs:
         
       - name: Terraform Apply
         working-directory: ResourceGroup_Infra/Root
-        run: terraform apply --var-file="Prod.tfvars"
+        run: terraform apply --auto-approve -var-file="Prod.tfvars"
