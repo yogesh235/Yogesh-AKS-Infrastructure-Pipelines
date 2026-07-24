@@ -25,6 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Repository
         uses: actions/checkout@v4
+      # Secrets are access from Respository, So that The Azure Login Credential can access any github workflow 
       - name: Azure Login
         uses: azure/login@v2
         with:
