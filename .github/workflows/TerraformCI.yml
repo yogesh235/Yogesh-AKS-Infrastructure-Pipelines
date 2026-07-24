@@ -30,11 +30,12 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
 
-      # Runs a set of commands using the runners shell
+      
       - name: Terraform Init
         working-directory: ResourceGroup_Infra/Root
         run: terraform init
@@ -52,6 +53,7 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.CREDENTIALS }}
+    
       - name: Terraform Init
         working-directory: ResourceGroup_Infra/Root
         run: terraform init
