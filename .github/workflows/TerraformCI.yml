@@ -24,16 +24,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - name: Install azure-cli
-        # You may pin to the exact commit or the version.
-        # uses: pietrobolcato/install-azure-cli-action@9a10af1be5e3eb7931f48c0290364a131e7ecd70
-        uses: pietrobolcato/install-azure-cli-action@v1.0.1
-      - name: Azure CLI Login
-        uses: azure/cli@v3
-        with:
-         inlineScript: |
-           az login --tenant da01548b-20fc-4057-8cda-5c68e4fcdd3e
-           az account show
+       name: Azure Login
+       uses: Azure/login@v3
+       with:
+       # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+       creds: ${{secret.CREDENTIAL}}
       # Sets up Terraform CLI in your GitHub Actions workflow
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
